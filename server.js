@@ -1,46 +1,39 @@
-const express = require("express")
-const mongoose = require("mongoose")
+require("dotenv").config();
+const express = require("express");
+const app = express();
 const cors = require("cors")
+const mongoose = require("mongoose")
+const taskRoutes = require("./routes/taskRoutes")
 
-const app = express()
 
-app.use(cors())
 app.use(express.json())
+app.use(cors({
+  origin: ["deployedfrontendurl", "http://localhost:5173"],
+  credentials: true,
+}));
 
-mongoose.connect("mongodb://127.0.0.1:27017/taskduty")
 
-const Task = mongoose.model("Task",{
-title:String,
-description:String,
-tag:String
-})
+//test route
+app.get("/", (req,res)=>{
+    res.status(200).json({success : true, message:"APPservername"})
+});
+app.use("/api/tasks", taskRoutes)
 
-app.get("/tasks",async(req,res)=>{
-const tasks = await Task.find()
-res.json(tasks)
-})
+const startServer = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log("MongoDB connected");
+        app.listen(process.env.PORT, ()=>{
+            console.log(`Server running on port : ${process.env.PORT}`);      
+        })
+    } catch (error) {
+      console.log(error);
+        
+    }
+}
+startServer()
 
-app.get("/tasks/:id",async(req,res)=>{
-const task = await Task.findById(req.params.id)
-res.json(task)
-})
-
-app.post("/tasks",async(req,res)=>{
-const task = new Task(req.body)
-await task.save()
-res.json(task)
-})
-
-app.put("/tasks/:id",async(req,res)=>{
-await Task.findByIdAndUpdate(req.params.id,req.body)
-res.json("updated")
-})
-
-app.delete("/tasks/:id",async(req,res)=>{
-await Task.findByIdAndDelete(req.params.id)
-res.json("deleted")
-})
-
-app.listen(5000,()=>{
-console.log("Server running on port 5000")
+//error route
+app.use((req,res)=>{
+    res.status(401).json({success: false, message: "ROUTE NOT FOUND" })
 })
