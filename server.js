@@ -8,7 +8,7 @@ const taskRoutes = require("./routes/taskRoutes")
 
 app.use(express.json())
 app.use(cors({
-  origin: ["deployedfrontendurl", "http://localhost:5173"],
+  origin: ["https://task-manager-phi-kohl-54.vercel.app", "http://localhost:5173"],
   credentials: true,
 }));
 
