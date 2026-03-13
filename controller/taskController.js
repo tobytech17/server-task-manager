@@ -24,7 +24,10 @@ const getTasks = async (req, res) => {
 // Get Single Task
 const getTaskById = async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+   const task = await Task.findOne({
+  _id: req.params.id,
+  user: req.userId
+});
     if (!task) return res.status(404).json({ message: 'Task not found' });
     res.status(200).json(task);
   } catch (error) {
@@ -35,7 +38,11 @@ const getTaskById = async (req, res) => {
 // Update Task
 const updateTask = async (req, res) => {
   try {
-    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, {
+    const updatedTask = await Task.findOneAndUpdate({
+      _id: req.params.id,
+      user: req.userId
+    }, req.body, 
+    {
       new: true,
       runValidators: true,
     });
@@ -49,7 +56,10 @@ const updateTask = async (req, res) => {
 // Delete Task
 const deleteTask = async (req, res) => {
   try {
-    const deletedTask = await Task.findByIdAndDelete(req.params.id);
+    const deletedTask = await Task.findOneAndDelete({
+      _id: req.params.id,
+      user: req.userId
+    });
     if (!deletedTask) return res.status(404).json({ message: 'Task not found' });
     res.status(200).json({ message: 'Task deleted successfully' });
   } catch (error) {

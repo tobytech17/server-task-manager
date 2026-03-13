@@ -11,6 +11,7 @@ const User = require("./models/user");
 app.use(express.json())
 app.use(cors({
   origin: ["https://task-manager-phi-kohl-54.vercel.app", "http://localhost:5173"],
+  methods : ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
 
@@ -120,3 +121,10 @@ app.post("/api/login", async (req, res) => {
     });
   }
 });
+
+app.use((req,res)=>{
+  res.status(404).json({
+    success:false,
+    message:"Route not found"
+  })
+})
