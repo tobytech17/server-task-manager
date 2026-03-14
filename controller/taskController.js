@@ -2,9 +2,11 @@ const Task = require('../models/taskModel');
 
 // Create Task
 const createTask = async (req, res) => {
+  console.log("userId:", req.userId);  // ← add here
+  console.log("body:", req.body);      // ← add here
   try {
     const { title, description, tag } = req.body;
-    const task = await Task.create({ title, description, tag });
+    const task = await Task.create({ title, description, tag, user: req.userId });
     res.status(201).json(task);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -14,7 +16,7 @@ const createTask = async (req, res) => {
 // Get All Tasks
 const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find({ user: req.userId });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });

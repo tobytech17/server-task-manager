@@ -2,19 +2,19 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors")
-const mongoose = require("mongoose")
-const taskRoutes = require("./routes/taskRoutes")
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("./models/user");
 
 app.use(express.json())
 app.use(cors({
   origin: ["https://task-manager-phi-kohl-54.vercel.app", "http://localhost:5173"],
   methods : ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
-
+const mongoose = require("mongoose")
+const taskRoutes = require("./routes/taskRoutes")
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("./models/user");
 
 //test route
 app.get("/", (req,res)=>{
