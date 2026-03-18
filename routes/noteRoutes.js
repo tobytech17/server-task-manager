@@ -7,7 +7,7 @@ const {
   getNoteById,
   updateNote,
   deleteNote
-} = require("../controllers/noteController");
+} = require("../controller/noteController");
 
 
 router.use(auth);
