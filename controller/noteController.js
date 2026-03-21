@@ -2,10 +2,14 @@ const Note = require ("../models/noteModel")
 
 //create note
 const createNote = async (req , res) => {
+   console.log("userId:", req.userId);
+  console.log("body:", req.body);
   try {
     const {title , content} = req.body;
     const note = await Note.create({title , content , user: req.userId});
+    res.status(201).json(note);
 } catch (error) {
+   console.log("error:", error.message);
   res.status (400).json({message :error.message})
 }};
 
